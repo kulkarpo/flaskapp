@@ -1,0 +1,18 @@
+app/.idea/*
+app/__pycache__/
+app/app/__pycache__/
+app/env/*
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+
+# Environments
+app/.env
+app/.venv
+app/env/
+app/venv/
+app/ENV/
+app/env.bak/
+app/venv.bak/
