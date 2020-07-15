@@ -2,6 +2,7 @@ from app import app
 from flask import render_template
 from datetime import datetime
 from flask import redirect, request
+from flask import jsonify, make_response
 
 @app.route("/")
 def index():
@@ -91,9 +92,15 @@ def sign_up():
         req = request.form
         #print(req)
 
-        #username = request.form["username"]
-        #email = request.form["email"]
-        #password = request.form["password"]
+        userid = request.form["userid"]
+        username = request.form["username"]
+        bio = request.form["bio"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        users[userid] = {"name": username,
+                         "twitter_handle": "@"+userid,
+                         "bio": bio}
 
         missing = list()
 
@@ -138,3 +145,23 @@ def profile(username):
 
     return render_template("public/profile.html", username=username, user=user)
     #return render_template("public/profile.html")
+
+
+@app.route("/json", methods=['POST', 'GET'])
+def json():
+
+    if request.method == 'POST':
+        if request.is_json:
+            req = request.get_json()
+            print(req)
+            response_body = {
+                "name": req.get("name"),
+                "message": req.get("message")
+            }
+            return make_response(jsonify(response_body), 200)
+
+        else:
+            return make_response(jsonify({"Message":"Not a json object! Try again.."}), 400)
+
+    else:
+        return "Recieved GET request"
