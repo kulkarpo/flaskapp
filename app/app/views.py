@@ -5,6 +5,7 @@ from flask import redirect, request
 from flask import jsonify, make_response
 import os
 from werkzeug.utils import secure_filename
+from flask import send_file, send_from_directory, abort, safe_join
 
 @app.route("/")
 def index():
@@ -250,3 +251,15 @@ def upload_image():
                 print("That file extension is not allowed ")
                 return redirect(request.url)
     return render_template("public/upload_image.html")
+
+
+app.config["CLIENT_IMG_FILES"] = "/Users/pk/Documents/Studies/selflearn/flaskapp/app/app/static/client/img"
+app.config["CLIENT_PDF_FILES"] = "/Users/pk/Documents/Studies/selflearn/flaskapp/app/app/static/client/pdf"
+
+
+@app.route("/get-image/<img_name>")
+def get_image(img_name):
+    try:
+        return send_from_directory(app.config["CLIENT_IMG_FILES"], filename=img_name, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
