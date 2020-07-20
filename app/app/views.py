@@ -263,3 +263,18 @@ def get_image(img_name):
         return send_from_directory(app.config["CLIENT_IMG_FILES"], filename=img_name, as_attachment=True)
     except FileNotFoundError:
         abort(404)
+
+
+@app.route("/cookies")
+def cookies():
+    res = make_response("Cookies")
+    res.set_cookie(
+        "flavor",
+        value="chocolate chip",
+        max_age=10,
+        path=request.path
+    )
+
+    res.set_cookie("chocolate type", "dark")
+    res.set_cookie("chewy", "yes")
+    return res
